@@ -1,0 +1,104 @@
+:root {
+  --guides-col-overlay-bg: rgba(0, 0, 0, 0.6);
+  --guides-col-text-shadow: #000;
+  --guides-z-overlay: 99996;
+  --guides-z-element: 99997;
+  --guides-z-mask: 99998;
+  --guides-z-guide: 99999;
+  --guides-transition-duration: 0.25s;
+}
+
+.guides-canvas,
+.guides-mask,
+.guides-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.guides-overlay {
+  background: var(--guides-col-overlay-bg);
+  z-index: var(--guides-z-overlay);
+}
+
+.guides-mask {
+  z-index: var(--guides-z-mask);
+}
+
+.guides-current-element {
+  z-index: var(--guides-z-element);
+  position: relative;
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.guides-fade-in {
+  -webkit-animation: fadeIn var(--guides-transition-duration) ease; /* Safari 4+ */
+  -moz-animation: fadeIn var(--guides-transition-duration) ease; /* Fx 5+ */
+  -o-animation: fadeIn var(--guides-transition-duration) ease; /* Opera 12+ */
+  animation: fadeIn var(--guides-transition-duration) ease; /* IE 10+ */
+}
+
+.guides-guide {
+  color: #fff;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px var(--guides-col-text-shadow);
+  position: absolute;
+  margin: 5px;
+  z-index: var(--guides-z-guide);
+}
+
+.guides-guide svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.guides-guide span {
+  display: inline-block;
+  padding: 10px;
+  font-size: 2rem;
+}
+
+.guides-top svg {
+  top: auto;
+  bottom: 0;
+}
+
+.guides-left svg {
+  left: auto;
+  right: 0;
+}
