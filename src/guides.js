@@ -17,10 +17,52 @@
     this.element = element;
   };
 
-  $$.prototype.addClass = function () {};
+  $$.prototype.css = function (key, value) {
+    if (this.element) {
+      this.element.style[key] = value;
+    }
+    return this;
+  };
+  $$.prototype.addClass = function (className) {
+    if (this.element) {
+      this.element.classList.add(className);
+    }
+    return this;
+  };
+  $$.prototype.appendTo = function (target) {
+    if (this.element) {
+      if (typeof target === "string") {
+        document.querySelector(target).appendChild(this.element);
+      } else {
+        target.appendChild(this.element);
+      }
+    }
+    return this;
+  };
 
-  var $ = function (sel) {
+
+  $$.prototype.outerHeight = function () {
+    console.log("OUTER HEIGHT OF ", this.element);
+    if (!this.element) {
+      return 0;
+    }
+  };
+
+  var $ = function (element) {
+    if (!element) {
+      return new $$();
+    }
+
+    var $elements =
+      typeof element === "string"
+        ? document.querySelectorAll(element)
+        : element;
+    console.log("ELEMENTS", $elements);
     return new $$();
+  };
+
+  $.isFunction = function (arg) {
+    return typeof arg === "function";
   };
 
   /* ------------------------------------------------------------------------ */
@@ -55,10 +97,21 @@
   </svg>';
 
   Guide.prototype.init = function () {
-    this.$guide = $("<div />", {
-      class: "guides-fade-in guides-guide " + this._class,
-      html: "<span>" + this.guide.html + "</span>",
-    });
+    this.$guide = document.createElement("div");
+    this.$guide.classList.add("guides-fade-in");
+    this.$guide.classList.add("guides-guide");
+    if (this._class) {
+      this.$guide.classList.add(this._class);
+    }
+    this.$guide.innerHTML = `<span>${this.guide.html}</span>`;
+
+    this.$guide = $(this.$guide);
+
+    // this.$guide = $("<div />", {
+    //   class: "guides-fade-in guides-guide " + this._class,
+    //   html: "<span>" + this.guide.html + "</span>",
+    // });
+
     this._position();
     return this;
   };
@@ -405,12 +458,13 @@
   };
 
   Guides.prototype._renderCanvas = function () {
-
     this.$canvas = document.createElement("div");
     this.$canvas.classList.add(...["guides-canvas", "guides-fade-in"]);
+
     this.$canvas.innerHTML =
       '<div class="guides-overlay"></div><div class="guides-mask"></div>';
-          document.body.appendChild(this.$canvas);
+
+    document.querySelector("body").appendChild(this.$canvas);
 
     // this.$canvas = $("<div />", {
     //   class: "guides-canvas guides-fade-in",
@@ -418,6 +472,7 @@
     // }).appendTo("body");
 
     this._bindNavigation();
+
     return this;
   };
 
@@ -443,8 +498,8 @@
   };
 
   Guides.prototype._bindNavigation = function () {
-    this.$canvas.on("click.guides", this._onCanvasClick.bind(this));
-    $(document).on("keyup.guides", this._onDocKeyUp.bind(this));
+    this.$canvas.addEventListener("click", this._onCanvasClick.bind(this));
+    window.addEventListener("keyup", this._onDocKeyUp.bind(this));
     return this;
   };
 
@@ -482,9 +537,8 @@
     };
 })(window);
 
-// var Guides = require("./modules/Guides");
-
 // $.fn.guides = function (option, optionData) {
+
 //   return this.each(function () {
 //     var $this = $(this),
 //       data = $this.data("guides"),
