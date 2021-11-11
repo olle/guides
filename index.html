@@ -210,13 +210,11 @@ guides.start();
 	</div>
 	<script type="text/javascript" src="./src/guides.js"></script>
 	<script type="text/javascript">
-		var g = guides({
+		var g = guides("#demo", {
 			guides: [
 				{ html: 'Welcome to Guides.js' }
 			]
 		});
-		g.start();
-		console.log(g);
 		// $('.demo').guides({
 		// 	guides: [{
 		// 		html: 'Welcome to Guides.js'

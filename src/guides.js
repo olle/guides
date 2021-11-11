@@ -15,8 +15,9 @@
 
   var $$ = function (element) {
     this.element = element;
+    console.log("CREATED WITH", this.element);
+    return this;
   };
-
   $$.prototype.css = function (key, value) {
     if (this.element) {
       this.element.style[key] = value;
@@ -26,6 +27,12 @@
   $$.prototype.addClass = function (className) {
     if (this.element) {
       this.element.classList.add(className);
+    }
+    return this;
+  };
+  $$.prototype.removeClass = function (className) {
+    if (this.element) {
+      this.element.classList.remove(className);
     }
     return this;
   };
@@ -39,13 +46,45 @@
     }
     return this;
   };
-
-
   $$.prototype.outerHeight = function () {
-    console.log("OUTER HEIGHT OF ", this.element);
     if (!this.element) {
       return 0;
     }
+    console.log("OUTER HEIGHT OF ", this.element);
+  };
+  $$.prototype.outerWidth = function () {
+    if (!this.element) {
+      return 0;
+    }
+    console.log("OUTER WIDTH OF ", this.element);
+  };
+  $$.prototype.offset = function () {
+    if (!this.element) {
+      return 0;
+    }
+    console.log("OFFSET FOR ", this);
+  };
+  $$.prototype.scrollTop = function () {
+    return this.element?.scrollTop || 0;
+  };
+  $$.prototype.scrollLeft = function () {
+    return this.element?.scrollLeft || 0;
+  };
+  $$.prototype.width = function () {
+    return this.element?.width || 0;
+  };
+  $$.prototype.height = function () {
+    return this.element?.height || 0;
+  };
+  $$.prototype.remove = function () {
+    if (this.element) {
+      var node = this.element;
+      if (node.parentNode) {
+        node.parentNode.removeChild(node);
+      }
+      return node;
+    }
+    return this;
   };
 
   var $ = function (element) {
@@ -53,12 +92,11 @@
       return new $$();
     }
 
-    var $elements =
-      typeof element === "string"
-        ? document.querySelectorAll(element)
-        : element;
-    console.log("ELEMENTS", $elements);
-    return new $$();
+    if (typeof element === "string") {
+      return new $$(document.querySelector(element));
+    }
+
+    return new $$(element);
   };
 
   $.isFunction = function (arg) {
@@ -367,11 +405,13 @@
   var Guides = function (element, options) {
     this.element = element;
     this.$element = $(element);
+
+    console.log("ENDING UP HERE", element,  this.$element.element);
     this.options = {};
     this._current = 0;
     this.setOptions(options);
     if (element) {
-      this.$element.on("click.guides", $.proxy(this.start, this));
+      this.$element.element.addEventListener("click", this.start.bind(this));
     }
   };
 
@@ -405,7 +445,8 @@
       this._currentGuide.destroy();
       this._currentGuide = null;
     }
-    $(document).off("keyup.guides");
+    window.removeEventListener("keyup", window.guides.KEYUP_EVENT_LISTENER);
+    window.guides.KEYUP_EVENT_LISTENER = null;
     this._callback("end");
     return this;
   };
@@ -432,7 +473,8 @@
 
   Guides.prototype.destroy = function () {
     this.end();
-    this.$element.off("click.guides");
+    window.removeEventListener("click", window.guides.MOUSE_CLICK_LISTENER);
+    window.guides.MOUSE_CLICK_LISTENER = null;
     this._callback("destroy");
     return this;
   };
@@ -498,8 +540,10 @@
   };
 
   Guides.prototype._bindNavigation = function () {
-    this.$canvas.addEventListener("click", this._onCanvasClick.bind(this));
-    window.addEventListener("keyup", this._onDocKeyUp.bind(this));
+    window.guides.MOUSE_CLICK_LISTENER = this._onCanvasClick.bind(this);
+    this.$canvas.addEventListener("click", window.guides.MOUSE_CLICK_LISTENER);
+    window.guides.KEYUP_EVENT_LISTENER = this._onDocKeyUp.bind(this);
+    window.addEventListener("keyup", window.guides.KEYUP_EVENT_LISTENER);
     return this;
   };
 
@@ -534,6 +578,7 @@
       if (typeof option === "object" && option) {
         return new Guides(null, option);
       }
+      return new Guides(option, optionData);
     };
 })(window);
 
