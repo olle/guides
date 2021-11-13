@@ -406,7 +406,7 @@
     this.element = element;
     this.$element = $(element);
 
-    console.log("ENDING UP HERE", element,  this.$element.element);
+    console.log("ENDING UP HERE", element, this.$element.element);
     this.options = {};
     this._current = 0;
     this.setOptions(options);
@@ -519,6 +519,8 @@
   };
 
   Guides.prototype._renderGuide = function (guide) {
+    console.log("RENDER", guide);
+
     if (!guide) {
       //no more guides
       this.end();
@@ -574,27 +576,50 @@
 
   $window.guides =
     $window.guides ||
-    function (option, optionData) {
-      if (typeof option === "object" && option) {
+    function (sel, option, optionData) {
+      if (typeof sel === "object" && option) {
         return new Guides(null, option);
       }
-      return new Guides(option, optionData);
+      var guides = new Guides(sel, option);
+      console.log("GG", guides);
     };
 })(window);
 
 // $.fn.guides = function (option, optionData) {
-
+//
+//   # Here jQuery is already bound to an element/instance
+//   # and the plugin is applied with 'this' context.
+//
 //   return this.each(function () {
-//     var $this = $(this),
-//       data = $this.data("guides"),
-//       options = typeof option === "object" && option;
-
+//
+//     # Save the context/element wrapped by jQuery
+//     var $this = $(this);
+//
+//     # Extract any `guides` state from bound element
+//     var data = $this.data("guides");
+//
+//     # In case non-selector, options is set to the configuration object
+//     # This is the global case.
+//     var options = typeof option === "object" && option;
+//
+//     # Missing state and configuration, exit!
 //     if (!data && typeof options == "string") return;
-//     if (!data) $this.data("guides", (data = new Guides(this, options)));
-//     if (typeof option == "string") data[option](optionData);
+//
+//     # Missing state
+//     if (!data) {
+//       # Initialize new state as a new Guides instance.
+//       $this.data("guides", (data = new Guides(this, options)));
+//     }
+//
+//     # Selector argument used to reference guide and invoke it, with optional
+//     # arguments.
+//     if (typeof option == "string") {
+//       data[option](optionData);
+//     }
 //   });
 // };
 
+// # Global method, initializes without being bound to a context/element/jQuery
 // $.guides = function (options) {
 //   return new Guides(null, options);
 // };
