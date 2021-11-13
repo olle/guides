@@ -400,13 +400,11 @@
     this.$guide.remove();
   };
 
-  /* ------------------------------------------------------------------------ */
+  /* Guides ----------------------------------------------------------------- */
 
   var Guides = function (element, options) {
     this.element = element;
     this.$element = $(element);
-
-    console.log("ENDING UP HERE", element, this.$element.element);
     this.options = {};
     this._current = 0;
     this.setOptions(options);
@@ -519,8 +517,6 @@
   };
 
   Guides.prototype._renderGuide = function (guide) {
-    console.log("RENDER", guide);
-
     if (!guide) {
       //no more guides
       this.end();
@@ -580,9 +576,12 @@
       if (typeof sel === "object" && option) {
         return new Guides(null, option);
       }
-      var guides = new Guides(sel, option);
-      console.log("GG", guides);
+      const guidesBoundToStartElement = new Guides(sel, option);
+      window.$guides = guidesBoundToStartElement;
+      return guidesBoundToStartElement;
     };
+
+
 })(window);
 
 // $.fn.guides = function (option, optionData) {

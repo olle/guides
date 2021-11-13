@@ -16,21 +16,19 @@ highlighted element with an SVG arrow.
 # Getting started
 
 Once you have downloaded the distribution, simply include `guides.min.css` in
-the head of your page:
+the head of your page, and `guides.min.js` in your page scripts section.
 
 ```html
-<head>
-  ...
-  <link rel="stylesheet" href="guides.min.css" />
-</head>
-```
-
-and `guides.min.js` in your page scripts section.
-
-```html
-	...
-	<script src="guides.min.js"></script>
-</body>
+<html>
+  <head>
+    ...
+    <link rel="stylesheet" href="guides.min.css" />
+  </head>
+  <body>
+    ...
+    <script src="guides.min.js"></script>
+  </body>
+</html>
 ```
 
 # Docs
