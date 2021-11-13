@@ -146,3 +146,6 @@ A guide object looks like this:
 - **prev** guides('#demo', { prev: onPrevFunction });
 - **render** guides('#demo', { render: onRenderFunction });
 - **destroy** guides('#demo', { destroy: onDestroyFunction });
+
+Happy coding!
+
