@@ -15,7 +15,6 @@
 
   var $$ = function (element) {
     this.element = element;
-    console.log("CREATED WITH", this.element);
     return this;
   };
   $$.prototype.css = function (key, value) {
@@ -60,9 +59,9 @@
   };
   $$.prototype.offset = function () {
     if (!this.element) {
-      return 0;
+      return {};
     }
-    console.log("OFFSET FOR ", this);
+    return { top: this.element.offsetTop, left: this.element.offsetLeft };
   };
   $$.prototype.scrollTop = function () {
     return this.element?.scrollTop || 0;
@@ -366,6 +365,8 @@
       );
       return;
     }
+
+    console.log("GGGG", this.$guide, this.$guide.left);
     var guideOffset = this.$guide.offset(),
       top = guideOffset.top,
       bottom = guideOffset.top + this.$guide.outerHeight(),
@@ -580,8 +581,6 @@
       window.$guides = guidesBoundToStartElement;
       return guidesBoundToStartElement;
     };
-
-
 })(window);
 
 // $.fn.guides = function (option, optionData) {
